@@ -1,0 +1,13 @@
+{
+  "project_name": "InitiaArcade",
+  "tagline": "On-Chain Gaming Platform with Creator Economy & Auto-Signing",
+  "repo_url": "https://github.com/raj99195/initia-arcade",
+  "commit_sha": "",
+  "rollup_chain_id": "initia-arcade-1",
+  "deployed_address": "0xd1aa08d2de31ca1af55682f4185547f92332bee",
+  "vm": "move",
+  "native_feature": "auto-signing",
+  "core_logic_path": "contracts/sources/platform.move",
+  "native_feature_frontend_path": "src/components/EnableAutoSign.jsx",
+  "demo_video_url": ""
+}
