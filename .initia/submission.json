@@ -9,5 +9,5 @@
   "native_feature": "auto-signing",
   "core_logic_path": "contracts/sources/platform.move",
   "native_feature_frontend_path": "src/components/EnableAutoSign.jsx",
-  "demo_video_url": ""
+  "demo_video_url": "https://www.youtube.com/watch?v=Pb-1HM0H-Lk"
 }
