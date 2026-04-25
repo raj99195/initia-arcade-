@@ -138,63 +138,13 @@ InitiaArcade is built from four tightly integrated layers:
 ### Game Score Lifecycle
 
 <div align="center">
-
-<svg width="100%" viewBox="0 0 680 620" role="img">
-<title>Game score submission flow</title>
-<desc>Flowchart showing how a game score is submitted on-chain with auto-sign or manual wallet</desc>
-<defs><marker id="a1" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M2 1L8 5L2 9" fill="none" stroke="context-stroke" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></marker></defs>
-<rect x="240" y="30" width="200" height="44" rx="8" fill="#EEEDFE" stroke="#534AB7" stroke-width="0.5"/><text font-family="sans-serif" font-size="13" font-weight="500" x="340" y="52" text-anchor="middle" dominant-baseline="central" fill="#3C3489">Player plays game</text>
-<line x1="340" y1="74" x2="340" y2="104" stroke="#888780" stroke-width="1.5" marker-end="url(#a1)"/>
-<rect x="200" y="104" width="280" height="56" rx="8" fill="#EEEDFE" stroke="#534AB7" stroke-width="0.5"/><text font-family="sans-serif" font-size="13" font-weight="500" x="340" y="122" text-anchor="middle" dominant-baseline="central" fill="#3C3489">arcade_gameOver(score)</text><text font-family="sans-serif" font-size="12" x="340" y="142" text-anchor="middle" dominant-baseline="central" fill="#534AB7">Unity C# calls arcade-sdk.js</text>
-<line x1="340" y1="160" x2="340" y2="190" stroke="#888780" stroke-width="1.5" marker-end="url(#a1)"/>
-<rect x="210" y="190" width="260" height="56" rx="8" fill="#E1F5EE" stroke="#0F6E56" stroke-width="0.5"/><text font-family="sans-serif" font-size="13" font-weight="500" x="340" y="208" text-anchor="middle" dominant-baseline="central" fill="#085041">postMessage(GAME_OVER)</text><text font-family="sans-serif" font-size="12" x="340" y="228" text-anchor="middle" dominant-baseline="central" fill="#0F6E56">React frontend receives event</text>
-<line x1="340" y1="246" x2="340" y2="276" stroke="#888780" stroke-width="1.5" marker-end="url(#a1)"/>
-<rect x="220" y="276" width="240" height="44" rx="8" fill="#F1EFE8" stroke="#5F5E5A" stroke-width="0.5"/><text font-family="sans-serif" font-size="13" font-weight="500" x="340" y="298" text-anchor="middle" dominant-baseline="central" fill="#2C2C2A">Shows "Writing on chain..."</text>
-<line x1="340" y1="320" x2="340" y2="348" stroke="#888780" stroke-width="1.5" marker-end="url(#a1)"/>
-<polygon points="340,348 430,388 340,428 250,388" fill="#F1EFE8" stroke="#888780" stroke-width="1"/>
-<text font-family="sans-serif" font-size="13" font-weight="500" x="340" y="388" text-anchor="middle" dominant-baseline="central" fill="#2C2C2A">Auto-sign ON?</text>
-<line x1="250" y1="388" x2="130" y2="388" stroke="#888780" stroke-width="1.5" marker-end="url(#a1)"/>
-<text font-family="sans-serif" font-size="12" x="192" y="376" text-anchor="middle" fill="#888780">YES</text>
-<rect x="30" y="420" width="190" height="56" rx="8" fill="#E1F5EE" stroke="#0F6E56" stroke-width="0.5"/><text font-family="sans-serif" font-size="13" font-weight="500" x="125" y="438" text-anchor="middle" dominant-baseline="central" fill="#085041">submitTxBlock</text><text font-family="sans-serif" font-size="12" x="125" y="458" text-anchor="middle" dominant-baseline="central" fill="#0F6E56">Silent tx — no popup</text>
-<line x1="430" y1="388" x2="550" y2="388" stroke="#888780" stroke-width="1.5" marker-end="url(#a1)"/>
-<text font-family="sans-serif" font-size="12" x="488" y="376" text-anchor="middle" fill="#888780">NO</text>
-<rect x="460" y="420" width="190" height="56" rx="8" fill="#FAECE7" stroke="#993C1D" stroke-width="0.5"/><text font-family="sans-serif" font-size="13" font-weight="500" x="555" y="438" text-anchor="middle" dominant-baseline="central" fill="#4A1B0C">requestTxBlock</text><text font-family="sans-serif" font-size="12" x="555" y="458" text-anchor="middle" dominant-baseline="central" fill="#993C1D">Wallet popup shown</text>
-<line x1="125" y1="476" x2="125" y2="530" stroke="#888780" stroke-width="1.5"/>
-<line x1="555" y1="476" x2="555" y2="530" stroke="#888780" stroke-width="1.5"/>
-<line x1="125" y1="530" x2="555" y2="530" stroke="#888780" stroke-width="1.5"/>
-<line x1="340" y1="530" x2="340" y2="558" stroke="#888780" stroke-width="1.5" marker-end="url(#a1)"/>
-<rect x="160" y="558" width="360" height="44" rx="8" fill="#E1F5EE" stroke="#0F6E56" stroke-width="0.5"/><text font-family="sans-serif" font-size="13" font-weight="500" x="340" y="580" text-anchor="middle" dominant-baseline="central" fill="#085041">TX confirmed on initia-arcade-1 ✓</text>
-</svg>
-
+<img src="public/game-score-flow.svg" width="100%" alt="Game Score Flow" />
 </div>
 
 ### Creator Economy Flow
 
 <div align="center">
-
-<svg width="100%" viewBox="0 0 680 700" role="img">
-<title>Creator economy flow</title>
-<desc>Flowchart showing how creators publish games and earn revenue on InitiaArcade</desc>
-<defs><marker id="a2" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M2 1L8 5L2 9" fill="none" stroke="context-stroke" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></marker></defs>
-<rect x="220" y="20" width="240" height="44" rx="8" fill="#EEEDFE" stroke="#534AB7" stroke-width="0.5"/><text font-family="sans-serif" font-size="13" font-weight="500" x="340" y="42" text-anchor="middle" dominant-baseline="central" fill="#3C3489">Creator connects wallet</text>
-<line x1="340" y1="64" x2="340" y2="94" stroke="#888780" stroke-width="1.5" marker-end="url(#a2)"/>
-<rect x="200" y="94" width="280" height="56" rx="8" fill="#EEEDFE" stroke="#534AB7" stroke-width="0.5"/><text font-family="sans-serif" font-size="13" font-weight="500" x="340" y="112" text-anchor="middle" dominant-baseline="central" fill="#3C3489">init_creator()</text><text font-family="sans-serif" font-size="12" x="340" y="132" text-anchor="middle" dominant-baseline="central" fill="#534AB7">On-chain creator account created</text>
-<line x1="340" y1="150" x2="340" y2="180" stroke="#888780" stroke-width="1.5" marker-end="url(#a2)"/>
-<rect x="190" y="180" width="300" height="56" rx="8" fill="#E1F5EE" stroke="#0F6E56" stroke-width="0.5"/><text font-family="sans-serif" font-size="13" font-weight="500" x="340" y="198" text-anchor="middle" dominant-baseline="central" fill="#085041">Fill game form</text><text font-family="sans-serif" font-size="12" x="340" y="218" text-anchor="middle" dominant-baseline="central" fill="#0F6E56">Name, iframe URL, reward rate</text>
-<line x1="340" y1="236" x2="340" y2="266" stroke="#888780" stroke-width="1.5" marker-end="url(#a2)"/>
-<rect x="190" y="266" width="300" height="56" rx="8" fill="#E1F5EE" stroke="#0F6E56" stroke-width="0.5"/><text font-family="sans-serif" font-size="13" font-weight="500" x="340" y="284" text-anchor="middle" dominant-baseline="central" fill="#085041">register_game()</text><text font-family="sans-serif" font-size="12" x="340" y="304" text-anchor="middle" dominant-baseline="central" fill="#0F6E56">Game stored on-chain — pending</text>
-<line x1="340" y1="322" x2="340" y2="352" stroke="#888780" stroke-width="1.5" marker-end="url(#a2)"/>
-<rect x="200" y="352" width="280" height="56" rx="8" fill="#FAEEDA" stroke="#854F0B" stroke-width="0.5"/><text font-family="sans-serif" font-size="13" font-weight="500" x="340" y="370" text-anchor="middle" dominant-baseline="central" fill="#412402">Admin: approve_game()</text><text font-family="sans-serif" font-size="12" x="340" y="390" text-anchor="middle" dominant-baseline="central" fill="#854F0B">Game goes live in arcade</text>
-<line x1="340" y1="408" x2="340" y2="438" stroke="#888780" stroke-width="1.5" marker-end="url(#a2)"/>
-<rect x="200" y="438" width="280" height="56" rx="8" fill="#F1EFE8" stroke="#5F5E5A" stroke-width="0.5"/><text font-family="sans-serif" font-size="13" font-weight="500" x="340" y="456" text-anchor="middle" dominant-baseline="central" fill="#2C2C2A">Player plays → GAME_OVER</text><text font-family="sans-serif" font-size="12" x="340" y="476" text-anchor="middle" dominant-baseline="central" fill="#5F5E5A">submit_score() on-chain</text>
-<line x1="340" y1="494" x2="340" y2="524" stroke="#888780" stroke-width="1.5" marker-end="url(#a2)"/>
-<rect x="190" y="524" width="300" height="56" rx="8" fill="#F1EFE8" stroke="#5F5E5A" stroke-width="0.5"/><text font-family="sans-serif" font-size="13" font-weight="500" x="340" y="542" text-anchor="middle" dominant-baseline="central" fill="#2C2C2A">Platform calculates rewards</text><text font-family="sans-serif" font-size="12" x="340" y="562" text-anchor="middle" dominant-baseline="central" fill="#5F5E5A">Player 80% · Creator 20%</text>
-<line x1="280" y1="580" x2="150" y2="628" stroke="#888780" stroke-width="1.5" marker-end="url(#a2)"/>
-<line x1="400" y1="580" x2="530" y2="628" stroke="#888780" stroke-width="1.5" marker-end="url(#a2)"/>
-<rect x="50" y="628" width="200" height="56" rx="8" fill="#E1F5EE" stroke="#0F6E56" stroke-width="0.5"/><text font-family="sans-serif" font-size="13" font-weight="500" x="150" y="646" text-anchor="middle" dominant-baseline="central" fill="#085041">+ARCADE → Player</text><text font-family="sans-serif" font-size="12" x="150" y="666" text-anchor="middle" dominant-baseline="central" fill="#0F6E56">80% of reward rate</text>
-<rect x="430" y="628" width="200" height="56" rx="8" fill="#EEEDFE" stroke="#534AB7" stroke-width="0.5"/><text font-family="sans-serif" font-size="13" font-weight="500" x="530" y="646" text-anchor="middle" dominant-baseline="central" fill="#3C3489">+ARCADE → Creator</text><text font-family="sans-serif" font-size="12" x="530" y="666" text-anchor="middle" dominant-baseline="central" fill="#534AB7">20% of reward rate</text>
-</svg>
-
+<img src="public/creator-economy-flow.svg" width="100%" alt="Creator Economy Flow" />
 </div>
 
 ---
