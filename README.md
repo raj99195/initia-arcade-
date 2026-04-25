@@ -520,7 +520,7 @@ npm install && npm run dev
 | Block Explorer | `https://scan.testnet.initia.xyz/initia-arcade-1` | Add custom rollup, inspect txs |
 | L1 Testnet RPC | `https://rpc.testnet.initia.xyz` | L1 connection |
 | L1 Testnet REST | `https://rest.testnet.initia.xyz` | L1 REST queries |
-| Faucet | `https://faucet.testnet.initia.xyz` | Get testnet INIT tokens |
+| Faucet | `https://app.testnet.initia.xyz/faucet` | Get testnet INIT tokens |
 
 ---
 
