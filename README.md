@@ -2,6 +2,10 @@
 
 <br />
 
+<img src="public/InitiaArcade-Image.png" width="100%" alt="InitiaArcade — On-Chain Gaming Platform" />
+
+<br />
+
 # 🕹️ INITIA ARCADE
 
 ### The world's first sovereign on-chain multi-game arcade platform with a full creator economy — built on Initia MoveVM.
