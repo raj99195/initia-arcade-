@@ -86,27 +86,27 @@ InitiaArcade is built from four tightly integrated layers:
 ```
 ┌─────────────────────────────────────────────────────────────────┐
 │                     initia-arcade (Frontend)                    │
-│                  React + Vite + Firebase Firestore               │
-│                                                                  │
+│                  React + Vite + Firebase Firestore              │
+│                                                                 │
 │  ┌──────────────┐  ┌──────────────┐  ┌────────────────────────┐ │
 │  │  Game Library│  │  Creator Hub │  │   Live Leaderboard     │ │
 │  │  7+ Games    │  │  Publish &   │  │   On-Chain Scores      │ │
 │  │  Filter/Search│ │  Track Earn  │  │   Global Rankings      │ │
 │  └──────────────┘  └──────────────┘  └────────────────────────┘ │
-│                                                                  │
+│                                                                 │
 │  ┌──────────────┐  ┌──────────────┐  ┌────────────────────────┐ │
 │  │  Admin Panel │  │  Community   │  │   ARCADE Token         │ │
 │  │  Approve     │  │  Likes &     │  │   Balance & Rewards    │ │
 │  │  Games       │  │  Comments    │  │   Live in Navbar       │ │
 │  └──────────────┘  └──────────────┘  └────────────────────────┘ │
-│                                                                  │
-│          InterwovenKit — auto-signing · wallet · bridge          │
+│                                                                 │
+│          InterwovenKit — auto-signing · wallet · bridge         │
 └──────────────────────────────┬──────────────────────────────────┘
                                │  iframe + postMessage SDK
 ┌──────────────────────────────▼──────────────────────────────────┐
 │                     arcade-sdk.js (Game SDK)                    │
-│             Unity WebGL / HTML5 Game Integration Layer           │
-│                                                                  │
+│             Unity WebGL / HTML5 Game Integration Layer          │
+│                                                                 │
 │  arcade_init() · arcade_gameOver() · arcade_updateScore()       │
 │  arcade_earnTokens() · arcade_getPlayerInfo() · arcade_buyItem()│
 └──────────────────────────────┬──────────────────────────────────┘
@@ -114,15 +114,15 @@ InitiaArcade is built from four tightly integrated layers:
 ┌──────────────────────────────▼──────────────────────────────────┐
 │                  contracts (MoveVM)                             │
 │            Sovereign Minitia L2 — initia-arcade-1               │
-│                                                                  │
-│  ┌─────────────────┐  ┌─────────────────┐  ┌─────────────────┐ │
-│  │  platform.move  │  │ leaderboard     │  │ arcade_token    │ │
-│  │                 │  │ .move           │  │ .move           │ │
-│  │  register_game  │  │ submit_score    │  │ initialize      │ │
-│  │  approve_game   │  │ get_player_stats│  │ mint_tokens     │ │
-│  │  record_play    │  │                 │  │ spend_tokens    │ │
-│  │  init_creator   │  │                 │  │ get_balance     │ │
-│  └─────────────────┘  └─────────────────┘  └─────────────────┘ │
+│                                                                 │
+│  ┌─────────────────┐  ┌─────────────────┐  ┌─────────────────┐  │
+│  │  platform.move  │  │ leaderboard     │  │ arcade_token    │  │
+│  │                 │  │ .move           │  │ .move           │  │
+│  │  register_game  │  │ submit_score    │  │ initialize      │  │
+│  │  approve_game   │  │ get_player_stats│  │ mint_tokens     │  │
+│  │  record_play    │  │                 │  │ spend_tokens    │  │
+│  │  init_creator   │  │                 │  │ get_balance     │  │
+│  └─────────────────┘  └─────────────────┘  └─────────────────┘  │
 └──────────────────────────────┬──────────────────────────────────┘
                                │  OPinit Optimistic Rollup
 ┌──────────────────────────────▼──────────────────────────────────┐
