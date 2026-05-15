@@ -1,69 +1,86 @@
-import { useEffect } from "react";
-import { WagmiProvider, createConfig, http } from "wagmi";
-import { mainnet } from "wagmi/chains";
+import { createConfig, http, WagmiProvider } from "wagmi";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import {
-  InterwovenKitProvider,
-  initiaPrivyWalletConnector,
-  injectStyles,
-  TESTNET,
-} from "@initia/interwovenkit-react";
-import styles from "@initia/interwovenkit-react/styles.js";
+import { createAppKit } from "@reown/appkit/react";
+import { WagmiAdapter } from "@reown/appkit-adapter-wagmi";
+import { defineChain } from "@reown/appkit/networks";
 
-const config = createConfig({
-  connectors: [initiaPrivyWalletConnector],
-  chains: [mainnet],
-  transports: { [mainnet.id]: http() },
+// BOTChain Testnet
+const botchainTestnet = defineChain({
+  id: parseInt(import.meta.env.VITE_BOTCHAIN_TESTNET_CHAIN_ID),
+  name: "BOTChain Testnet",
+  nativeCurrency: { name: "BOT", symbol: "BOT", decimals: 18 },
+  rpcUrls: {
+    default: { http: [import.meta.env.VITE_BOTCHAIN_TESTNET_RPC_URL] },
+  },
+  blockExplorers: {
+    default: { name: "BOTScan", url: "https://scan.botchain.ai" },
+  },
+  testnet: true,
 });
+
+// BOTChain Mainnet
+const botchainMainnet = defineChain({
+  id: parseInt(import.meta.env.VITE_BOTCHAIN_MAINNET_CHAIN_ID),
+  name: "BOTChain",
+  nativeCurrency: { name: "BOT", symbol: "BOT", decimals: 18 },
+  rpcUrls: {
+    default: { http: [import.meta.env.VITE_BOTCHAIN_MAINNET_RPC_URL] },
+  },
+  blockExplorers: {
+    default: { name: "BOTScan", url: "https://scan.botchain.ai" },
+  },
+});
+
+const projectId = import.meta.env.VITE_REOWN_PROJECT_ID;
 const queryClient = new QueryClient();
 
-export const CONTRACT_ADDRESS = import.meta.env.VITE_CONTRACT || "0xd1aa08d2de31ca1af55682f4185547f92332bee";
-export const ADMIN_ADDRESS = "init1amxedetgfud5nsnht7kmuh0xajcp9uktclq7sh";
-export const CHAIN_ID = import.meta.env.VITE_CHAIN_ID || "initiation-2";
+const networks = [botchainTestnet, botchainMainnet];
 
-const customChain = {
-  chain_id: "initia-arcade-1",
-  chain_name: "initia-arcade-1",
-  pretty_name: "initia-arcade-1",
-  bech32_prefix: "init",
-  slip44: 60,
-  apis: {
-    rpc: [{ address: "http://localhost:26657" }],
-    rest: [{ address: "http://localhost:1317" }],
-    indexer: [{ address: "http://localhost:8080" }],
-  },
-  fees: {
-    fee_tokens: [{
-      denom: "umin",
-      fixed_min_gas_price: 0.015,
-      low_gas_price: 0.015,
-      average_gas_price: 0.025,
-      high_gas_price: 0.04,
-    }],
-  },
-  staking: {
-    staking_tokens: [{ denom: "umin" }],
-  },
-};
+const wagmiAdapter = new WagmiAdapter({
+  networks,
+  projectId,
+  ssr: false,
+});
 
-const isLocal = import.meta.env.VITE_CHAIN_ID === "initia-arcade-1";
+// AppKit initialize
+createAppKit({
+  adapters: [wagmiAdapter],
+  networks,
+  projectId,
+  defaultNetwork: botchainTestnet,
+  metadata: {
+    name: "ArcadeX",
+    description: "Play. Earn. Build — On Any Chain.",
+    url: "https://arcadex.vercel.app",
+    icons: ["/IA-logo.png"],
+  },
+  features: {
+    analytics: false,
+    email: false,
+    socials: false,
+    onramp: false,
+    swaps: false,
+  },
+  themeMode: "dark",
+  themeVariables: {
+    "--w3m-accent": "#7B2FFF",
+    "--w3m-border-radius-master": "8px",
+  },
+});
+
+// Contract Addresses
+export const ARCADE_TOKEN_ADDRESS = import.meta.env.VITE_ARCADE_TOKEN_ADDRESS;
+export const LEADERBOARD_ADDRESS = import.meta.env.VITE_LEADERBOARD_ADDRESS;
+export const PLATFORM_ADDRESS = import.meta.env.VITE_PLATFORM_ADDRESS;
+export const ADMIN_ADDRESS = import.meta.env.VITE_ADMIN_ADDRESS;
+export const CHAIN_ID = parseInt(import.meta.env.VITE_BOTCHAIN_TESTNET_CHAIN_ID);
 
 export default function Providers({ children }) {
-  useEffect(() => {
-    injectStyles(styles);
-  }, []);
   return (
-    <QueryClientProvider client={queryClient}>
-      <WagmiProvider config={config}>
-        <InterwovenKitProvider
-          {...TESTNET}
-          defaultChainId={CHAIN_ID}
-          customChain={isLocal ? customChain : undefined}
-          enableAutoSign
-        >
-          {children}
-        </InterwovenKitProvider>
-      </WagmiProvider>
-    </QueryClientProvider>
+    <WagmiProvider config={wagmiAdapter.wagmiConfig}>
+      <QueryClientProvider client={queryClient}>
+        {children}
+      </QueryClientProvider>
+    </WagmiProvider>
   );
 }

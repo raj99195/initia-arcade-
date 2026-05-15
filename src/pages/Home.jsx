@@ -1,7 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { useAccount } from "wagmi";
-import { useInterwovenKit } from "@initia/interwovenkit-react";
-import EnableAutoSign from "../components/EnableAutoSign";
+import { useAppKit } from "@reown/appkit/react";
 import { useGames } from "../hooks/useGames";
 import GameCard from "../components/GameCard";
 import { useEffect, useState } from "react";
@@ -11,7 +10,7 @@ import { useArcadeBalance } from "../hooks/useArcadeBalance";
 export default function Home() {
   const navigate = useNavigate();
   const { isConnected } = useAccount();
-  const { openConnect, autoSign } = useInterwovenKit();
+  const { open } = useAppKit();
   const { balance } = useArcadeBalance();
   const { games } = useGames();
   const [scores, setScores] = useState([]);
@@ -163,8 +162,9 @@ export default function Home() {
               Fast · Secure · Interoperable
             </div>
 
-            {isConnected ? <EnableAutoSign /> : (
-              <button onClick={openConnect} style={{
+            {/* Connect button — Privy login */}
+            {!isConnected && (
+  <button onClick={() => open()} style={{
                 display: "inline-flex", alignItems: "center", gap: 7,
                 padding: "8px 13px", background: "rgba(0,255,136,0.05)",
                 border: "1px solid rgba(0,255,136,0.15)", borderRadius: 7,
@@ -175,7 +175,7 @@ export default function Home() {
                 onMouseLeave={e => { e.currentTarget.style.borderColor = "rgba(0,255,136,0.15)"; e.currentTarget.style.color = "rgba(0,255,136,0.55)"; }}
               >
                 <span style={{ width: 5, height: 5, borderRadius: "50%", background: "rgba(0,255,136,0.35)" }} />
-                Connect wallet to enable auto-sign
+                Connect wallet to play & earn
               </button>
             )}
           </div>
@@ -279,7 +279,6 @@ export default function Home() {
 
         {/* Header */}
         <div style={{ position: "relative", zIndex: 1, padding: "10px 14px 10px", borderBottom: "1px solid rgba(123,47,255,0.15)", flexShrink: 0 }}>
-          {/* Top row: title + live + view all */}
           <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 8 }}>
             <span style={{ fontFamily: "'Rajdhani',sans-serif", fontWeight: 700, fontSize: 11, textTransform: "uppercase", letterSpacing: "1.5px", color: "#e0d0ff" }}>
               Live Leaderboard
@@ -295,56 +294,32 @@ export default function Home() {
               >View All</button>
             </div>
           </div>
-
         </div>
 
-        {/* ── Top 3 Podium ── */}
+        {/* Top 3 Podium */}
         <div style={{ position: "relative", zIndex: 1, padding: "14px 8px 12px", borderBottom: "1px solid rgba(123,47,255,0.1)", display: "flex", justifyContent: "center", alignItems: "flex-end", gap: 10, flexShrink: 0 }}>
-
-          {/* 2nd place */}
+          {/* 2nd */}
           <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 4 }}>
-            <div style={{ width: 38, height: 38, borderRadius: "50%", background: "rgba(123,47,255,0.2)", border: "2px solid rgba(192,192,192,0.5)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 20 }}>
-              🥈
-            </div>
-            <div style={{ fontFamily: "'Orbitron',sans-serif", fontSize: 6, color: "#7755aa", textAlign: "center", maxWidth: 58, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
-              {top3[1] ? shortAddr(top3[1].player) : "—"}
-            </div>
-            <div style={{ fontFamily: "'Rajdhani',sans-serif", fontWeight: 700, fontSize: 12, color: "#C0C0C0" }}>
-              {top3[1] ? fmtScore(top3[1].bestScore) : "—"}
-            </div>
+            <div style={{ width: 38, height: 38, borderRadius: "50%", background: "rgba(123,47,255,0.2)", border: "2px solid rgba(192,192,192,0.5)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 20 }}>🥈</div>
+            <div style={{ fontFamily: "'Orbitron',sans-serif", fontSize: 6, color: "#7755aa", textAlign: "center", maxWidth: 58, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{top3[1] ? shortAddr(top3[1].player) : "—"}</div>
+            <div style={{ fontFamily: "'Rajdhani',sans-serif", fontWeight: 700, fontSize: 12, color: "#C0C0C0" }}>{top3[1] ? fmtScore(top3[1].bestScore) : "—"}</div>
           </div>
-
-          {/* 1st place */}
+          {/* 1st */}
           <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 4, marginBottom: 10 }}>
-            <div style={{ width: 46, height: 46, borderRadius: "50%", background: "rgba(123,47,255,0.15)", border: "2px solid rgba(255,215,0,0.7)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 26, boxShadow: "0 0 20px rgba(255,215,0,0.25)" }}>
-              🥇
-            </div>
-            <div style={{ fontFamily: "'Orbitron',sans-serif", fontSize: 6, color: "#9977dd", textAlign: "center", maxWidth: 68, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
-              {top3[0] ? shortAddr(top3[0].player) : "—"}
-            </div>
-            <div style={{ fontFamily: "'Rajdhani',sans-serif", fontWeight: 700, fontSize: 15, color: "#d4b8ff" }}>
-              {top3[0] ? fmtScore(top3[0].bestScore) : "0.0K"}
-            </div>
+            <div style={{ width: 46, height: 46, borderRadius: "50%", background: "rgba(123,47,255,0.15)", border: "2px solid rgba(255,215,0,0.7)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 26, boxShadow: "0 0 20px rgba(255,215,0,0.25)" }}>🥇</div>
+            <div style={{ fontFamily: "'Orbitron',sans-serif", fontSize: 6, color: "#9977dd", textAlign: "center", maxWidth: 68, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{top3[0] ? shortAddr(top3[0].player) : "—"}</div>
+            <div style={{ fontFamily: "'Rajdhani',sans-serif", fontWeight: 700, fontSize: 15, color: "#d4b8ff" }}>{top3[0] ? fmtScore(top3[0].bestScore) : "0.0K"}</div>
           </div>
-
-          {/* 3rd place */}
+          {/* 3rd */}
           <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 4 }}>
-            <div style={{ width: 38, height: 38, borderRadius: "50%", background: "rgba(123,47,255,0.15)", border: "2px solid rgba(205,127,50,0.5)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 20 }}>
-              🥉
-            </div>
-            <div style={{ fontFamily: "'Orbitron',sans-serif", fontSize: 6, color: "#6644aa", textAlign: "center", maxWidth: 58, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
-              {top3[2] ? shortAddr(top3[2].player) : "—"}
-            </div>
-            <div style={{ fontFamily: "'Rajdhani',sans-serif", fontWeight: 700, fontSize: 12, color: "#CD7F32" }}>
-              {top3[2] ? fmtScore(top3[2].bestScore) : "—"}
-            </div>
+            <div style={{ width: 38, height: 38, borderRadius: "50%", background: "rgba(123,47,255,0.15)", border: "2px solid rgba(205,127,50,0.5)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 20 }}>🥉</div>
+            <div style={{ fontFamily: "'Orbitron',sans-serif", fontSize: 6, color: "#6644aa", textAlign: "center", maxWidth: 58, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{top3[2] ? shortAddr(top3[2].player) : "—"}</div>
+            <div style={{ fontFamily: "'Rajdhani',sans-serif", fontWeight: 700, fontSize: 12, color: "#CD7F32" }}>{top3[2] ? fmtScore(top3[2].bestScore) : "—"}</div>
           </div>
         </div>
 
-        {/* Rows 4-8 + Initia Panel — dono hamesha dikhenge */}
+        {/* Rows 4-8 + BOTChain Panel */}
         <div style={{ flex: 1, overflowY: "hidden", position: "relative", zIndex: 1 }}>
-
-          {/* Score rows 4-8 */}
           {rest.map((row, i) => (
             <div key={i} style={{ display: "flex", alignItems: "center", gap: 8, padding: "9px 14px", borderBottom: "1px solid rgba(123,47,255,0.07)", cursor: "pointer", transition: "background 0.15s" }}
               onMouseEnter={e => e.currentTarget.style.background = "rgba(123,47,255,0.08)"}
@@ -364,27 +339,16 @@ export default function Home() {
             </div>
           ))}
 
-          {/* ── ARCADE Token Utility ── */}
-          <div style={{
-            margin: "10px 12px",
-            background: "linear-gradient(135deg,rgba(123,47,255,0.1),rgba(0,212,255,0.05))",
-            border: "1px solid rgba(123,47,255,0.25)",
-            borderRadius: 12,
-            overflow: "hidden",
-          }}>
-            {/* Header */}
+          {/* ARCADE Token Utility */}
+          <div style={{ margin: "10px 12px", background: "linear-gradient(135deg,rgba(123,47,255,0.1),rgba(0,212,255,0.05))", border: "1px solid rgba(123,47,255,0.25)", borderRadius: 12, overflow: "hidden" }}>
             <div style={{ padding: "12px 14px 10px", borderBottom: "1px solid rgba(123,47,255,0.12)", display: "flex", alignItems: "center", gap: 8 }}>
-              <img src="/Arcade-token-logo.png" alt="ARCADE"
-                style={{ width: 22, height: 22, borderRadius: "50%", objectFit: "cover", flexShrink: 0 }}
-                onError={e => e.target.style.display = "none"}
-              />
+              <img src="/Arcade-token-logo.png" alt="ARCADE" style={{ width: 22, height: 22, borderRadius: "50%", objectFit: "cover", flexShrink: 0 }} onError={e => e.target.style.display = "none"} />
               <div>
                 <div style={{ fontFamily: "'Rajdhani',sans-serif", fontWeight: 700, fontSize: 11, color: "#c4a0ff", textTransform: "uppercase", letterSpacing: "1px" }}>ARCADE Token</div>
                 <div style={{ fontSize: 8, color: "#5533aa", fontFamily: "'Rajdhani',sans-serif" }}>Utility · Governance · Rewards</div>
               </div>
             </div>
 
-            {/* Live use */}
             <div style={{ padding: "10px 14px 6px" }}>
               <div style={{ fontSize: 8, color: "#00FF88", fontFamily: "'Rajdhani',sans-serif", fontWeight: 700, textTransform: "uppercase", letterSpacing: "1px", marginBottom: 6, display: "flex", alignItems: "center", gap: 5 }}>
                 <span style={{ width: 5, height: 5, borderRadius: "50%", background: "#00FF88", animation: "lbPulse 1.5s ease-in-out infinite" }} />
@@ -404,7 +368,6 @@ export default function Home() {
               ))}
             </div>
 
-            {/* Coming soon */}
             <div style={{ padding: "8px 14px 12px" }}>
               <div style={{ fontSize: 8, color: "#FFB800", fontFamily: "'Rajdhani',sans-serif", fontWeight: 700, textTransform: "uppercase", letterSpacing: "1px", marginBottom: 6 }}>
                 🔮 Coming Soon
@@ -413,7 +376,7 @@ export default function Home() {
                 { icon: "🛒", label: "In-Game Shop", desc: "Spend tokens on items & skins" },
                 { icon: "🗳️", label: "Governance", desc: "Vote on platform decisions" },
                 { icon: "💎", label: "Staking", desc: "Lock tokens, earn yield" },
-                { icon: "🏅", label: "NFT Achievements", desc: "Mint badges on Initia chain" },
+                { icon: "🏅", label: "NFT Achievements", desc: "Mint badges on BOTChain" },
               ].map((item, i) => (
                 <div key={i} style={{ display: "flex", alignItems: "center", gap: 8, padding: "5px 0" }}>
                   <span style={{ fontSize: 12, flexShrink: 0 }}>{item.icon}</span>
@@ -427,158 +390,46 @@ export default function Home() {
             </div>
           </div>
 
-          <div style={{
-            padding: "20px",
-            background: "linear-gradient(180deg,rgba(20,8,40,0.95),rgba(10,4,25,0.98))",
-            borderRadius: 12,
-            border: "1px solid rgba(123,47,255,0.25)"
-          }}>
-
-            {/* HEADER */}
-            <div style={{
-              textAlign: "center",
-              padding: "18px 12px",
-              borderBottom: "1px solid rgba(123,47,255,0.15)"
-            }}>
-              <div style={{
-                height: 228,
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                marginBottom: 10
-              }}>
-                <img src="/initia_logo.png" style={{
-                  maxHeight: "100%",
-                  width: "auto",
-                  objectFit: "contain",
-                  filter: "drop-shadow(0 0 10px rgba(123,47,255,0.6))"
-                }} />
+          {/* BOTChain Panel */}
+          <div style={{ padding: "20px", background: "linear-gradient(180deg,rgba(20,8,40,0.95),rgba(10,4,25,0.98))", borderRadius: 12, border: "1px solid rgba(123,47,255,0.25)", margin: "10px 12px" }}>
+            <div style={{ textAlign: "center", padding: "18px 12px", borderBottom: "1px solid rgba(123,47,255,0.15)" }}>
+              <div style={{ fontSize: 16, fontWeight: 700, color: "#fff", fontFamily: "Rajdhani", marginBottom: 6 }}>
+                Built on BOTChain
               </div>
-              <div style={{
-                fontSize: 16,
-                fontWeight: 700,
-                color: "#fff",
-                fontFamily: "Rajdhani",
-                marginBottom: 6
-              }}>
-                Built on Initia
-              </div>
-
-              <div style={{
-                fontSize: 12,
-                background: "linear-gradient(90deg,#7B2FFF,#00d4ff)",
-                WebkitBackgroundClip: "text",
-                WebkitTextFillColor: "transparent",
-                fontWeight: 700,
-                marginBottom: 8
-              }}>
+              <div style={{ fontSize: 12, background: "linear-gradient(90deg,#7B2FFF,#00d4ff)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", fontWeight: 700, marginBottom: 8 }}>
                 Powered by the Future
               </div>
-
-              <p style={{
-                fontSize: 10,
-                color: "#7755aa",
-                lineHeight: 1.6
-              }}>
-                Interwoven rollup network for scalable, secure on-chain gaming.
+              <p style={{ fontSize: 10, color: "#7755aa", lineHeight: 1.6 }}>
+                High-performance EVM L1 for scalable, secure on-chain gaming.
               </p>
             </div>
 
-            {/* FEATURES */}
             {[
-              {
-                title: "Built on Initia",
-                desc: "High-performance L1 + rollups",
-                icon: "/initia_logo.png"
-              },
-              {
-                title: "True Ownership",
-                desc: "Your assets live on-chain",
-                icon: "⭐"
-              },
-              {
-                title: "Play & Earn",
-                desc: "Real rewards from gameplay",
-                icon: "🎮"
-              },
-              {
-                title: "Interoperable",
-                desc: "Connect across ecosystem",
-                icon: "🔗"
-              }
+              { title: "Built on BOTChain", desc: "High-performance EVM L1", icon: "⛓️" },
+              { title: "True Ownership", desc: "Your assets live on-chain", icon: "⭐" },
+              { title: "Play & Earn", desc: "Real rewards from gameplay", icon: "🎮" },
+              { title: "Interoperable", desc: "Connect across ecosystem", icon: "🔗" },
             ].map((item, i) => (
-              <div key={i} style={{
-                display: "flex",
-                alignItems: "center",
-                gap: 12,
-                padding: "14px 10px",
-                borderBottom: i < 3 ? "1px solid rgba(123,47,255,0.1)" : "none"
-              }}>
-
-                {/* ICON */}
-                <div style={{
-                  width: 36,
-                  height: 36,
-                  borderRadius: "50%",
-                  background: "rgba(123,47,255,0.15)",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  fontSize: 16,
-                  border: "1px solid rgba(123,47,255,0.3)"
-                }}>
-                  {typeof item.icon === "string" && item.icon.startsWith("/")
-                    ? <img src={item.icon} style={{ width: 20 }} />
-                    : item.icon
-                  }
+              <div key={i} style={{ display: "flex", alignItems: "center", gap: 12, padding: "14px 10px", borderBottom: i < 3 ? "1px solid rgba(123,47,255,0.1)" : "none" }}>
+                <div style={{ width: 36, height: 36, borderRadius: "50%", background: "rgba(123,47,255,0.15)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 16, border: "1px solid rgba(123,47,255,0.3)" }}>
+                  {item.icon}
                 </div>
-
-                {/* TEXT */}
                 <div>
-                  <div style={{
-                    fontSize: 12,
-                    fontWeight: 700,
-                    color: "#c4a0ff",
-                    marginBottom: 3
-                  }}>
-                    {item.title}
-                  </div>
-
-                  <div style={{
-                    fontSize: 10,
-                    color: "#7755aa"
-                  }}>
-                    {item.desc}
-                  </div>
+                  <div style={{ fontSize: 12, fontWeight: 700, color: "#c4a0ff", marginBottom: 3 }}>{item.title}</div>
+                  <div style={{ fontSize: 10, color: "#7755aa" }}>{item.desc}</div>
                 </div>
               </div>
             ))}
 
-            {/* FOOTER */}
-            <div style={{
-              display: "flex",
-              alignItems: "center",
-              gap: 10,
-              padding: "14px 10px",
-              marginTop: 6,
-              background: "rgba(123,47,255,0.05)",
-              borderRadius: 8
-            }}>
-              <img src="/initia_logo.png" style={{ width: 26 }} />
-
+            <div style={{ display: "flex", alignItems: "center", gap: 10, padding: "14px 10px", marginTop: 6, background: "rgba(123,47,255,0.05)", borderRadius: 8 }}>
+              <span style={{ fontSize: 20 }}>⛓️</span>
               <div>
-                <div style={{ fontSize: 12, color: "#c4a0ff", fontWeight: 700 }}>
-                  Initia Network
-                </div>
-                <div style={{ fontSize: 9, color: "#5533aa" }}>
-                  One Network. Infinite Games.
-                </div>
+                <div style={{ fontSize: 12, color: "#c4a0ff", fontWeight: 700 }}>BOTChain</div>
+                <div style={{ fontSize: 9, color: "#5533aa" }}>One Network. Infinite Games.</div>
               </div>
             </div>
-
           </div>
         </div>
-
 
         {/* Footer */}
         <div style={{ padding: "8px 14px", borderTop: "1px solid rgba(123,47,255,0.1)", display: "flex", alignItems: "center", justifyContent: "center", gap: 5, flexShrink: 0, position: "relative", zIndex: 1 }}>

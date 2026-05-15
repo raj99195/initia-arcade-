@@ -1,55 +1,40 @@
 import { useEffect, useState } from "react";
-import { useInterwovenKit } from "@initia/interwovenkit-react";
+import { useAccount, usePublicClient } from "wagmi";
 
-const CONTRACT = "0xd1aa08d2de31ca1af55682f4185547f92332bee";
-const REST = import.meta.env.VITE_REST_URL || "https://rest.testnet.initia.xyz";
+const ARCADE_TOKEN_ADDRESS = import.meta.env.VITE_ARCADE_TOKEN_ADDRESS;
 
-function bech32ToHex(addr) {
-  const charset = "qpzry9x8gf2tvdw0s3jn54khce6mua7l";
-  const stripped = addr.slice(addr.indexOf("1") + 1);
-  const data = [];
-  for (const c of stripped) {
-    const idx = charset.indexOf(c);
-    if (idx !== -1) data.push(idx);
-  }
-  const result = [];
-  let acc = 0, bits = 0;
-  for (const val of data.slice(0, -6)) {
-    acc = ((acc << 5) | val) & 0x1fff;
-    bits += 5;
-    if (bits >= 8) { bits -= 8; result.push((acc >> bits) & 0xff); }
-  }
-  return "0x" + result.map(b => b.toString(16).padStart(2, "0")).join("");
-}
+const ERC20_ABI = [
+  {
+    name: "balanceOf",
+    type: "function",
+    stateMutability: "view",
+    inputs: [{ name: "account", type: "address" }],
+    outputs: [{ name: "", type: "uint256" }],
+  },
+];
 
 export function useArcadeBalance() {
-  const { initiaAddress } = useInterwovenKit();
+  const { address, isConnected } = useAccount();
+  const publicClient = usePublicClient();
   const [balance, setBalance] = useState("0");
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    if (!initiaAddress) return;
+    if (!isConnected || !address || !publicClient) return;
 
     const fetchBalance = async () => {
       setLoading(true);
       try {
-        const hexAddr = bech32ToHex(initiaAddress);
-        const res = await fetch(
-          `${REST}/initia/move/v1/accounts/${hexAddr}/resources`
-        );
-        const data = await res.json();
+        const raw = await publicClient.readContract({
+          address: ARCADE_TOKEN_ADDRESS,
+          abi: ERC20_ABI,
+          functionName: "balanceOf",
+          args: [address],
+        });
 
-        // ArcadeBalance struct dhundho
-        const arcadeResource = data?.resources?.find(
-          r => r.struct_tag === `${CONTRACT}::arcade_token::ArcadeBalance`
-        );
-
-        if (arcadeResource) {
-          const parsed = JSON.parse(arcadeResource.move_resource);
-          setBalance(parsed?.data?.amount || "0");
-        } else {
-          setBalance("0");
-        }
+        // 18 decimals — human readable
+        const formatted = (Number(raw) / 1e18).toFixed(2);
+        setBalance(formatted);
       } catch (err) {
         console.error("Balance fetch failed:", err);
         setBalance("0");
@@ -61,7 +46,7 @@ export function useArcadeBalance() {
     fetchBalance();
     const interval = setInterval(fetchBalance, 15000);
     return () => clearInterval(interval);
-  }, [initiaAddress]);
+  }, [address, isConnected, publicClient]);
 
   return { balance, loading };
 }
